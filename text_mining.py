@@ -4,7 +4,6 @@ Markov text generator for political news headlines
 @author Lilo Heinrich
 """
 
-import string
 import re
 import random
 import pickle
@@ -75,8 +74,9 @@ def make_word_dict(starters, word_dict, word_list, chain_length):
         chain_length: [int] number of words to group by
 
     Example:
-        get_keys(['the','brown','fox','jumped','over','the','brown','dog'], 2):
+        get_keys(['and','the','brown','fox','jumped','over','the','brown','dog'], 2):
         word_dict: {('the','brown'):['fox','dog'],('brown','fox'):['jumped']...}
+        starters: {('and', 'the'), ['brown']}
     """
     for i in range(len(word_list)-chain_length):
         key = []
@@ -84,15 +84,13 @@ def make_word_dict(starters, word_dict, word_list, chain_length):
             key.append(word_list[i+j])
 
         if i == 0:
-            if starters.get(tuple(key)) == None:
-                starters[tuple(key)] = [word_list[i+chain_length]]
-            else:
-                starters[tuple(key)].append(word_list[i+chain_length])
+            val = starters.get(tuple(key), [])
+            val.append(word_list[i+chain_length])
+            starters[tuple(key)] = val
         else:
-            if word_dict.get(tuple(key)) == None:
-                word_dict[tuple(key)] = [word_list[i+chain_length]]
-            else:
-                word_dict[tuple(key)].append(word_list[i+chain_length])
+            val = word_dict.get(tuple(key), [])
+            val.append(word_list[i+chain_length])
+            word_dict[tuple(key)] = val
 
 def generate_text(starters, word_dict, chain_length, num_words):
     """ Generates text randomly from the given dictionaries of word sequences.

@@ -1,19 +1,25 @@
 # Text Mining
 Repository for Mini Project 3: Text Mining
 
-
-See [reflection](reflection.md) for findings.
-
-
-
 ## Markov Text Generation of Political News Headlines
+
+1. install pickle library: **pip install pickle**
+2. install requests library: **pip install requests**
+3. run **python text_pickler.py** to update news headlines
+4. run **python text_mining.py** to generate fake news headlines and analyze word frequency
+
+See **[reflection](reflection.md)** for more details.
+
+### Summary
 What I did:
-* Scraped html of news sites for headlines: CNN, Fox, Politico, Washington Post, New York Times
-* Used markov chains to generate fake news
+
+    Scraped html of news sites for headlines: CNN, Fox, Politico, Washington Post, New York Times
+    Used markov chains to generate fake news
 
 What I found out:
-* Chains longer than one word don’t have many diverging options due to dataset size
-* Varying degrees of believability/readability (markov chains not an ideal way to implement)
+
+    Chains longer than one word don’t have many diverging options due to dataset size
+    Varying degrees of believability/readability (markov chains not an ideal way to implement)
 
 Examples:
 
@@ -33,7 +39,7 @@ Examples:
     NYPD to hear case of the Country: 2 Sets of Netflix stock.
     Lilly Ledbetter, advocate for female VP pledge
 
-Top 20 words in the news:
+Top 20 words in the news (on 3/31/20):
 * ['to', 'of', 'for', 'on', 'in', 'with', 'is', 'says', 'as', 'from', 'be', 'he', 'during', 'response', 'by', 'will', 'that', 'pandemic', 'more', 'are']
 
 Top 20 words in the news excluding common words:
