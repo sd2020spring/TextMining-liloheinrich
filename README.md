@@ -1,6 +1,11 @@
 # Text Mining
 Repository for Mini Project 3: Text Mining
 
+
+See [reflection](reflection.md) for findings.
+
+
+
 ## Markov Text Generation of Political News Headlines
 What I did:
 * Scraped html of news sites for headlines: CNN, Fox, Politico, Washington Post, New York Times

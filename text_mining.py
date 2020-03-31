@@ -12,9 +12,14 @@ def get_top_words(word_list, n, exclude_common_words):
     Returns: [int] n most frequently occurring words ordered from most to least
     """
     d = dict()
-    words_exclude = ['to','of','for','on','in','with','is','says','as','from','be','he','by','will','that','more','are','his','has','up','or','could','who','not','most','it','at','an','they','the','over','out','and','after','was','under','a']
+    words_exclude = ['to','of','for','on','in','with','is','says','as','from',
+            'be','he','by','will','that','more','are','his','has','up','or',
+            'could','who','not','most','it','at','an','they','the','over','out',
+            'and','after','was','under','a']
+
     for word in word_list:
-        if word[0].isalpha() and ((exclude_common_words and word not in words_exclude) or not exclude_common_words):
+        include_word = exclude_common_words and word not in words_exclude
+        if word[0].isalpha() and include_word or not exclude_common_words:
             d[word.lower()] = d.get(word,0) + 1
     ordered = sorted(d.items(), key = lambda kv:(kv[1], kv[0]), reverse=True)
 
