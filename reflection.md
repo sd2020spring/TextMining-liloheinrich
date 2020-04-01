@@ -24,29 +24,32 @@ I deliberately chose wide-ranging and sometimes controversial news sources for v
 
 ## Implementation
 ### Dictionary data structures
-The way that it encodes the Markov chain is that it first takes all of the headlines and turns them into a single string, separated by newline characters. Next, it processes the text, creating two dictionaries relating groupings of '*chain_length*' number of words to a list of the words that follow that grouping, including the duplicates for the ease of randomization. The first dictionary is the '*starters*', containing the groupings from the start of each line, and providing a starting point for generating text. The second is '*word_dict*', containing all of the rest. To create them, for each of the headlines, it adds the word at index [i+chain_length+1] to the list of words that follow the grouping preceding it [i, i+chain_length].
+The way that it encodes the Markov chain is that it first takes all of the headlines and turns them into a single string, separated by newline characters. Next, it processes the text, creating two dictionaries relating groupings of '*chain_length*' number of words to a list of the words that follow that grouping, including the duplicates for the ease of randomization. The first dictionary is the '*starters*', containing the groupings from the start of each line, and providing a starting point for generating text. The second is '*word_dict*', containing all of the rest. To create them, for each of the headlines, it adds the word at index [i+chain_length+1] to the list of words that follow the grouping preceding it [i, i+chain_length].  
+
 Examples:
-      * >>> process_text(text=['I have a dog', 'I have a cat', 'I have a fish'], chain_length=3)
-        * word_list=['I', 'have', 'a', 'dog', 'I', 'have', 'a', 'cat', 'I', 'have', 'a', 'fish']
-        * word_dict={}
-        * starters={('I', 'have', 'a'): ['dog', 'cat', 'fish']})
-      * >>> make_word_dict(starters={}, word_dict={}, text=['the','brown','fox','jumped','over','the','brown','dog'], chain_length=2)
-        * word_dict={('brown','fox'): ['jumped'], ('fox', 'jumped'): ['over'], ('jumped', 'over'): ['the'], ('over', 'the'): ['brown'], ('the','brown'): ['dog']}
-        * starters={('the','brown'): ['fox']}
+* process_text(text=['I have a dog', 'I have a cat', 'I have a fish'], chain_length=3)
+  * word_list=['I', 'have', 'a', 'dog', 'I', 'have', 'a', 'cat', 'I', 'have', 'a', 'fish']
+  * word_dict={}
+  * starters={('I', 'have', 'a'): ['dog', 'cat', 'fish']})
+* make_word_dict(starters={}, word_dict={}, text=['the','red','fox','jumped','over','the','dog'], chain_length=2)
+  * word_dict={('red','fox'): ['jumped'], ('fox', 'jumped'): ['over'], ('jumped', 'over'): ['the'], ('over', 'the'): ['dog']}
+  * starters={('the','red'): ['fox']}
 
 ### Generating text
-Next, to randomly generate text, it traverses through '*word_dict*' and '*starters*'. First, it picks a random item from '*starters*' and adds the first word in the key's tuple to the randomly generated string. Next, it picks a random word from the list of options of words that follow that key. Then it updates the key tuple, effectively shifting over all of the words to the left, getting rid of the oldest and adding the one picked in the previous step. It repeats the previous two steps either until there are no values to choose from or it hits the maximum words limit.
+Next, to randomly generate text, it traverses through '*word_dict*' and '*starters*'. First, it picks a random item from '*starters*' and adds the first word in the key's tuple to the randomly generated string. Next, it picks a random word from the list of options of words that follow that key. Then it updates the key tuple, effectively shifting over all of the words to the left, getting rid of the oldest and adding the one picked in the previous step. It repeats the previous two steps either until there are no values to choose from or it hits the maximum words limit.  
+
 Example:
-      * >>> generate_text(starters={('Trump', 'thinks', 'golf'): ['is']}, word_dict={('thinks', 'golf', 'is'):['the'], ('golf', 'is', 'the'): ['best']}, chain_length=3, max_words=10)
-        * 'Trump thinks golf is the best'
+* generate_text(starters={('Trump', 'thinks', 'golf'): ['is']}, word_dict={('thinks', 'golf', 'is'):['the'], ('golf', 'is', 'the'): ['best']}, chain_length=3, max_words=10)
+  * 'Trump thinks golf is the best'
 
 ### Word frequency
-It also creates a list of all words including duplicates, in order, that is used to calculate the most frequent words by going through the whole list and adding 1 to the value corresponding to the dictionary key of that word. Then the dictionary is sorted by its' values and iterated through to grab the top n keys and append them to a list.
+It also creates a list of all words including duplicates, in order, that is used to calculate the most frequent words by going through the whole list and adding 1 to the value corresponding to the dictionary key of that word. Then the dictionary is sorted by its' values and iterated through to grab the top n keys and append them to a list.  
+
 Examples:
-      * >>> get_top_words(['hi', 'my', 'name', 'is', 'steve', 'hi', 'my', 'name', 'is', 'not', 'amon'], 4, False)
-        * ['name', 'my', 'is', 'hi']
-      * >>> get_top_words(['hi', 'my', 'name', 'is', 'steve', 'hi', 'my', 'name', 'is', 'not', 'amon'], 4, True)
-        * ['name', 'hi', 'steve', 'amon']
+* get_top_words(word_list=['hi', 'my', 'name', 'is', 'steve', 'hi', 'my', 'name', 'is', 'not', 'amon'], num_words=4, exclude_common_words=False)
+  * ['name', 'my', 'is', 'hi']
+* get_top_words(word_list=['hi', 'my', 'name', 'is', 'steve', 'hi', 'my', 'name', 'is', 'not', 'amon'], num_words=4, exclude_common_words=True)
+  * ['name', 'hi', 'steve', 'amon']
 
 ### Design Decision
 One decision that I made is that I deliberately left case, punctuation, and special characters in for everything except the word frequency count because it helped retain the original meaning and produce authentic and grammatically correct headlines while avoiding the issue of figuring out how to code out punctuation and capitalization correction. The drawback in doing so was that I lost some possible word connections, decreasing the options available for text generation for example if the case didn't match, etc. The other option that I didn't pursue because it added a bit more complexity was to try separating punctuation into its' own tokens, expanding the available options - ex. 'I tripped, said the man.' becoming word_list = ['I', 'tripped', ',', 'said', 'the', 'man', '.']. However, that has the potential to allow for too much or too little punctuation, leading to run on sentences or fragments.
