@@ -18,12 +18,17 @@ def get_top_words(word_list, n, exclude_common_words):
         exclude_common_words: [bool] whether to exclude words such as 'with'
     Returns:
         [int] n most frequently occurring words ordered from most to least
+    Examples:
+        >>> get_top_words(['hi', 'my', 'name', 'is', 'steve', 'hi', 'my', 'name', 'is', 'not', 'amon'], 4, False)
+        ['name', 'my', 'is', 'hi']
+        >>> get_top_words(['hi', 'my', 'name', 'is', 'steve', 'hi', 'my', 'name', 'is', 'not', 'amon'], 4, True)
+        ['name', 'hi', 'steve', 'amon']
     """
     d = dict()
     words_exclude = ['to','of','for','on','in','with','is','says','as','from',
             'be','he','by','will','that','more','are','his','has','up','or',
             'could','who','not','most','it','at','an','they','the','over','out',
-            'and','after','was','under','a','but','might','getting','get']
+            'and','after','was','under','a','but','might','getting','get', 'my']
 
     for word in word_list:
         include_word = exclude_common_words and word not in words_exclude
@@ -43,7 +48,7 @@ def process_text(text, chain_length):
     words in the given text.
 
     Args:
-        text: [string] all of the text to process as one headline per line
+        text: [list of strings] all of the headlines to process
         chain_length: [int] the number of words in each grouping
 
     Returns:
@@ -51,9 +56,11 @@ def process_text(text, chain_length):
             (intentionally leaving case, punctuation, and special characters to preserve authenticity)
         word_dict: [dictionary] matches tuples of words of length chain_length
             to the list of words that follows each sequence including duplicates
-            ex. {('I', 'have', 'a'), ['dog', 'cat', 'fish']}
         starters: [dictionary] the same format as word_dict, but for only the
             sequences that start each headline, used to pick a starting point for the chain
+    Examples:
+        >>> process_text(['I have a dog', 'I have a cat', 'I have a fish'], 3)
+        (['I', 'have', 'a', 'dog', 'I', 'have', 'a', 'cat', 'I', 'have', 'a', 'fish'], {}, {('I', 'have', 'a'): ['dog', 'cat', 'fish']})
     """
     word_list = []
     starters = {}
@@ -63,33 +70,32 @@ def process_text(text, chain_length):
         make_word_dict(starters, word_dict, i.split(), chain_length)
     return word_list, word_dict, starters
 
-def make_word_dict(starters, word_dict, word_list, chain_length):
-    """ Modifies two dictionary with keys that are tuples of all combinations of
-    chain_length number of words that are found in order in word list, mapped to
-    lists of which words were found to follow that sequence, including duplicates.
-    The starters dictionary has all of the starting points, word_dict has everything else.
+def make_word_dict(starters, word_dict, headline, chain_length):
+    """ Modifies two dictionaries with keys that are combinations of chain_length
+    number of words mapped to lists of which words were found to follow that sequence,
+    including duplicates. The starters dictionary has all of the starting points,
+    word_dict has everything else.
 
     Args:
-        word_list: [list] a list of words in a text, in order
+        starters: [dictionary] the same format as word_dict, but for only the
+            sequences that start each headline, used to pick a starting point for the chain
+        word_dict: [dictionary] matches tuples of words of length chain_length
+            to the list of words that follows each sequence including duplicates
+        headline: [list of strings] one headline split into a list of tokens/words
         chain_length: [int] number of words to group by
-
-    Example:
-        get_keys(['and','the','brown','fox','jumped','over','the','brown','dog'], 2):
-        word_dict: {('the','brown'):['fox','dog'],('brown','fox'):['jumped']...}
-        starters: {('and', 'the'), ['brown']}
     """
-    for i in range(len(word_list)-chain_length):
+    for i in range(len(headline)-chain_length):
         key = []
         for j in range(chain_length):
-            key.append(word_list[i+j])
+            key.append(headline[i+j])
 
         if i == 0:
             val = starters.get(tuple(key), [])
-            val.append(word_list[i+chain_length])
+            val.append(headline[i+chain_length])
             starters[tuple(key)] = val
         else:
             val = word_dict.get(tuple(key), [])
-            val.append(word_list[i+chain_length])
+            val.append(headline[i+chain_length])
             word_dict[tuple(key)] = val
 
 def generate_text(starters, word_dict, chain_length, num_words):
@@ -106,6 +112,10 @@ def generate_text(starters, word_dict, chain_length, num_words):
 
     Return:
         [string] the randomly generated text
+
+    Examples:
+        >>> generate_text({('Trump', 'thinks', 'golf'): ['is']}, {('thinks', 'golf', 'is'):['the'], ('golf', 'is', 'the'): ['best']}, 3, 10)
+        'Trump thinks golf is the best'
     """
     key, val = random.choice(list(starters.items()))
     str = key[0]
@@ -146,6 +156,9 @@ def reload_headlines():
     return text
 
 if __name__== '__main__':
+    import doctest
+    doctest.testmod()
+
     # load up headlines
     chain_length = 1
     max_words = 20
