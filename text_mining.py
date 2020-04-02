@@ -16,8 +16,10 @@ def get_top_words(word_list, n, exclude_common_words):
         word_list: [str] a list of words including all duplicates
         n: [int] number of words to return
         exclude_common_words: [bool] whether to exclude words such as 'with'
+
     Returns:
         [int] n most frequently occurring words ordered from most to least
+
     Examples:
         >>> get_top_words(['hi', 'my', 'name', 'is', 'steve', 'hi', 'my', 'name', 'is', 'not', 'amon'], 4, False)
         ['name', 'my', 'is', 'hi']
@@ -104,7 +106,6 @@ def generate_text(starters, word_dict, chain_length, num_words):
     Args:
         word_dict: [dictionary] matches tuples of words of length chain_length
             to the list of words that follows each sequence including duplicates
-            ex. {('I', 'have', 'a'), ['dog', 'cat', 'fish']}
         starters: [dictionary] the same format as word_dict, but for only the
             sequences that start each headline, used to pick a starting point for the chain
         chain_length: [int] number of words the dictionaries are grouped by
@@ -114,8 +115,8 @@ def generate_text(starters, word_dict, chain_length, num_words):
         [string] the randomly generated text
 
     Examples:
-        >>> generate_text({('Trump', 'thinks', 'golf'): ['is']}, {('thinks', 'golf', 'is'):['the'], ('golf', 'is', 'the'): ['best']}, 3, 10)
-        'Trump thinks golf is the best'
+        >>> generate_text({('Trump', 'thinks', 'golf'): ['is']}, {('thinks', 'golf', 'is'):['great']}, 3, 10)
+        'Trump thinks golf is great'
     """
     key, val = random.choice(list(starters.items()))
     str = key[0]

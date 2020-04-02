@@ -33,13 +33,6 @@ def pickle_it(filename, link, regex, method):
     pickle.dump(match, f)
     f.close()
 
-# array of all the needed information about each source and how to process it
-info = [['nytimes', 'https://www.nytimes.com/section/politics', "==.headline\":{\"default\":\"(.*?)\"", 1],
-        ['wapo', 'https://www.washingtonpost.com/politics/?nid=top_nav_politics', "itemprop=\"url\">(.*?)</a></h2>", 0],
-        ['fox', 'https://www.foxnews.com/politics', "\"title\":\"(.*?)\"", 2],
-        ['cnn', 'https://www.cnn.com/politics', "\"headline\":\"(.*?)\"", 2],
-        ['politico', 'https://www.politico.com/politics', "<p>(.*?)</p>", 2]]
-
 # links that I never got around to processing:
 # https://www.npr.org/sections/politics/
 # https://www.breitbart.com/politics/
@@ -50,5 +43,12 @@ info = [['nytimes', 'https://www.nytimes.com/section/politics', "==.headline\":{
 # https://www.huffpost.com/news/politics
 
 if __name__ == '__main__':
+    # array of all the needed information about each data source and how to process it
+    info = [['nytimes', 'https://www.nytimes.com/section/politics', "==.headline\":{\"default\":\"(.*?)\"", 1],
+            ['wapo', 'https://www.washingtonpost.com/politics/?nid=top_nav_politics', "itemprop=\"url\">(.*?)</a></h2>", 0],
+            ['fox', 'https://www.foxnews.com/politics', "\"title\":\"(.*?)\"", 2],
+            ['cnn', 'https://www.cnn.com/politics', "\"headline\":\"(.*?)\"", 2],
+            ['politico', 'https://www.politico.com/politics', "<p>(.*?)</p>", 2]]
+
     for i in info:
         pickle_it(i[0], i[1], i[2], i[3])

@@ -1,0 +1,20 @@
+Help on module text_pickler:
+
+NAME
+    text_pickler - Supporting file for MP3 - scrapes and pickles headlines from news websites.
+
+FUNCTIONS
+    pickle_it(filename, link, regex, method)
+        Gets the html code of a webpage, filters it for news headlines using a
+        given regular expression and processing method, then pickles it to save it
+        under the given filename.
+
+        Args:
+            filename: [string] filename to save pickle file as
+            link: [string] the link to the webpage to read
+            regex: the regular expression to use for the 'findall' function
+            method: [int] 0/1/2 - which method of processing the 'findall' result to use,
+                allowing me to define this function instead of repeating this code every time
+
+FILE
+    /home/lilo/SoftwareDesign/Projects/TextMining/text_pickler.py

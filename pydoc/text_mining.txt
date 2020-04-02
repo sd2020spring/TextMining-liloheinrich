@@ -1,0 +1,89 @@
+Help on module text_mining:
+
+NAME
+    text_mining
+
+DESCRIPTION
+    Mini Project 3: Text Mining for Software Design Spring 2020
+    Markov text generator for political news headlines
+    @author Lilo Heinrich
+
+FUNCTIONS
+    generate_text(starters, word_dict, chain_length, num_words)
+        Generates text randomly from the given dictionaries of word sequences.
+
+        Args:
+            word_dict: [dictionary] matches tuples of words of length chain_length
+                to the list of words that follows each sequence including duplicates
+            starters: [dictionary] the same format as word_dict, but for only the
+                sequences that start each headline, used to pick a starting point for the chain
+            chain_length: [int] number of words the dictionaries are grouped by
+            num_words: [int] the number of words to cut off the generated text at
+
+        Return:
+            [string] the randomly generated text
+
+        Examples:
+            >>> generate_text({('Trump', 'thinks', 'golf'): ['is']}, {('thinks', 'golf', 'is'):['great']}, 3, 10)
+            'Trump thinks golf is great'
+
+    get_top_words(word_list, n, exclude_common_words)
+        Take a list of words as input and return a list of the n most
+        frequently occurring words ordered from most- to least- frequent.
+
+        Args:
+            word_list: [str] a list of words including all duplicates
+            n: [int] number of words to return
+            exclude_common_words: [bool] whether to exclude words such as 'with'
+
+        Returns:
+            [int] n most frequently occurring words ordered from most to least
+
+        Examples:
+            >>> get_top_words(['hi', 'my', 'name', 'is', 'steve', 'hi', 'my', 'name', 'is', 'not', 'amon'], 4, False)
+            ['name', 'my', 'is', 'hi']
+            >>> get_top_words(['hi', 'my', 'name', 'is', 'steve', 'hi', 'my', 'name', 'is', 'not', 'amon'], 4, True)
+            ['name', 'hi', 'steve', 'amon']
+
+    make_word_dict(starters, word_dict, headline, chain_length)
+        Modifies two dictionaries with keys that are combinations of chain_length
+        number of words mapped to lists of which words were found to follow that sequence,
+        including duplicates. The starters dictionary has all of the starting points,
+        word_dict has everything else.
+
+        Args:
+            starters: [dictionary] the same format as word_dict, but for only the
+                sequences that start each headline, used to pick a starting point for the chain
+            word_dict: [dictionary] matches tuples of words of length chain_length
+                to the list of words that follows each sequence including duplicates
+            headline: [list of strings] one headline split into a list of tokens/words
+            chain_length: [int] number of words to group by
+
+    process_text(text, chain_length)
+        Compile the markov chain dictionary, starting points, and list of all
+        words in the given text.
+
+        Args:
+            text: [list of strings] all of the headlines to process
+            chain_length: [int] the number of words in each grouping
+
+        Returns:
+            word_list: [list of strings] all words including duplicates in text
+                (intentionally leaving case, punctuation, and special characters to preserve authenticity)
+            word_dict: [dictionary] matches tuples of words of length chain_length
+                to the list of words that follows each sequence including duplicates
+            starters: [dictionary] the same format as word_dict, but for only the
+                sequences that start each headline, used to pick a starting point for the chain
+        Examples:
+            >>> process_text(['I have a dog', 'I have a cat', 'I have a fish'], 3)
+            (['I', 'have', 'a', 'dog', 'I', 'have', 'a', 'cat', 'I', 'have', 'a', 'fish'], {}, {('I', 'have', 'a'): ['dog', 'cat', 'fish']})
+
+    reload_headlines()
+        Load up the text inside of the pickle files of news sites' headlines.
+
+        Returns:
+            [string] the headlines from all of the pickled sites compiled into one
+                string, with each headline separated by new line characters
+
+FILE
+/home/lilo/SoftwareDesign/Projects/TextMining/text_mining.py
