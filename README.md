@@ -3,10 +3,10 @@ Repository for Mini Project 3: Text Mining
 
 ## Markov Text Generation of Political News Headlines
 
-1. install pickle library: **pip install pickle**
-2. install requests library: **pip install requests**
-3. run **python text_pickler.py** to update news headlines
-4. run **python text_mining.py** to generate fake news headlines and analyze word frequency
+1. install pickle library: `pip install pickle`
+2. install requests library: `pip install requests`
+3. run `python text_pickler.py` to update news headlines
+4. run `python text_mining.py` to generate fake news headlines and analyze word frequency
 
 See **[reflection](reflection.md)** for more details.
 
