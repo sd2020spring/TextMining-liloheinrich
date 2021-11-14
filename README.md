@@ -1,5 +1,5 @@
 # Text Mining
-Repository for Mini Project 3: Text Mining
+Software Design Mini Project 3: Text Mining
 
 ## Markov Text Generation of Political News Headlines
 
