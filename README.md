@@ -42,5 +42,5 @@ Examples:
 Top 20 words in the news (on 3/31/20):
 * ['to', 'of', 'for', 'on', 'in', 'with', 'is', 'says', 'as', 'from', 'be', 'he', 'during', 'response', 'by', 'will', 'that', 'pandemic', 'more', 'are']
 
-Top 20 words in the news excluding common words:
+Top 20 words in the news excluding common words (on 3/31/20):
 * ['during', 'response', 'pandemic', 'need', 'amid', 'outbreak', 'governor', 'federal', 'public', 'political', 'home', 'help', 'guidelines', 'crisis', 'coronavirus,', 'bill', 'administration', 'virus', 'trillion', 'stimulus']
